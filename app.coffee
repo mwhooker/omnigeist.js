@@ -6,7 +6,7 @@ app = express.createServer()
 
 app.configure(() ->
     coffeeDir = __dirname + '/static/coffee'
-    publicDir = __dirname + '/static/public/js'
+    publicDir = __dirname + '/static/public/js/lib'
     app.use express.compiler(src: coffeeDir, dest: publicDir, enable: ['coffeescript'])
 
     app.use(express.methodOverride())
