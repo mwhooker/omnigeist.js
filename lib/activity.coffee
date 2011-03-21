@@ -5,7 +5,7 @@ SingleUrlExpander = require('url-expander').SingleUrlExpander
 
 
 class UserActivity
-    constructor: (@host, @link, @username, @comment, @timestamp, @others...) ->
+    constructor: (@host, @link, @permalink, @username, @comment, @timestamp, @others...) ->
 
 
 class Activity
