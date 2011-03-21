@@ -33,7 +33,8 @@ app.get "/", (req, res) ->
 app.get "/top", (req, res) ->
     platform = new activity.Reddit req.query.url
     platform.get((activity) ->
-        res.end(activity)
+        res.write(JSON.stringify(activity))
+        res.write('\n')
     )
 
 console.log "Listening on port 8000"
