@@ -28,9 +28,7 @@ app.configure('production', () ->
 )
 
 app.get "/", (req, res) ->
-    t = new r.Ta
-    res.send t.x()
-    #res.send 'nomnom'
+    res.send 'hello, world'
 
 app.get "/top", (req, res) ->
     send_activity = (c_url) ->
