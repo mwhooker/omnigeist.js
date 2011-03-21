@@ -15,13 +15,11 @@ app.configure(() ->
 )
 
 app.configure('development', () ->
-    console.log __dirname + '/static'
     app.use(express.static(__dirname + '/static/public'))
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 )
 
 app.configure('production', () ->
-    console.log "production"
     oneYear = 31557600000
     app.use(express.static(__dirname + '/static/public', { maxAge: oneYear }))
     app.use(express.errorHandler())
@@ -37,7 +35,6 @@ app.get "/top", (req, res) ->
     platform.get((activity) ->
         res.end(activity)
     )
-
 
 console.log "Listening on port 8000"
 app.listen 8000
