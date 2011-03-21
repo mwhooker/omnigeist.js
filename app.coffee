@@ -1,8 +1,10 @@
 express = require 'express'
-activity = require './lib/activity'
+geist = require './lib/activity'
+LRU = require 'lru-cache'
+SingleUrlExpander = require('url-expander').SingleUrlExpander
+
 app = express.createServer()
-
-
+cache = LRU()
 
 app.configure(() ->
     coffeeDir = __dirname + '/static/coffee'
@@ -31,11 +33,39 @@ app.get "/", (req, res) ->
     #res.send 'nomnom'
 
 app.get "/top", (req, res) ->
-    platform = new activity.Reddit req.query.url
-    platform.get((activity) ->
-        res.write(JSON.stringify(activity))
-        res.write('\n')
-    )
+    send_activity = (c_url) ->
+        key = 'activity:' + c_url
+        if activity = cache.get(key)
+            console.log "found cached value for #{ c_url }"
+            res.end(JSON.stringify(activity))
+        else
+            all_activity = []
+            platform = new geist.Reddit c_url
+            platform.fetch()
+            platform.on('activity', (activity) ->
+                console.log 'event activity'
+                all_activity.push activity
+                res.write(JSON.stringify(activity))
+                res.write('\n')
+            )
+            platform.on('done', () ->
+                console.log "done"
+                cache.set(key, all_activity)
+                res.end()
+            )
+
+    if c_url = cache.get(req.query.url)
+        send_activity(c_url)
+    else
+        expander = new SingleUrlExpander(req.query.url)
+        expander.expand()
+        expander.on('expanded',
+            (originalUrl, expandedUrl) ->
+                cache.set(req.query.url, expandedUrl)
+                send_activity(expandedUrl)
+            )
+
+
 
 console.log "Listening on port 8000"
 app.listen 8000
