@@ -35,7 +35,10 @@ app.get "/top", (req, res) ->
         key = 'activity:' + c_url
         if activity = cache.get(key)
             console.log "found cached value for #{ c_url }"
-            res.end(JSON.stringify(activity))
+            for a in activity
+                res.write(JSON.stringify(a))
+                res.write('\n')
+            res.end()
         else
             all_activity = []
             platform = new geist.Reddit c_url
