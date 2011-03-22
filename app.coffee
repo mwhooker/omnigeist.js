@@ -1,3 +1,4 @@
+jade = require 'jade'
 express = require 'express'
 geist = require './lib/activity'
 LRU = require 'lru-cache'
@@ -12,6 +13,8 @@ app.configure(() ->
     publicDir = __dirname + '/static/public/js/lib'
     app.use express.compiler(src: coffeeDir, dest: publicDir, enable: ['coffeescript'])
 
+    app.set('view engine', 'jade')
+    app.set('views', __dirname + '/views')
     app.use(express.methodOverride())
     app.use(express.bodyParser())
     app.use(app.router)
@@ -30,6 +33,13 @@ app.configure('production', () ->
 
 app.get "/", (req, res) ->
     res.send 'hello, world'
+
+app.get "/top.html", (req, res) ->
+    url = req.query.url
+    res.render('index', {
+        layout: false
+        url: url
+    })
 
 app.get "/top.json", (req, res) ->
     send_activity = (c_url) ->
@@ -74,7 +84,17 @@ socket = io.listen app
 socket.on('connection', (client) ->
     console.log 'connection'
     client.on('message', (data) ->
-        console.log data
+        expander = new SingleUrlExpander(data)
+        expander.expand()
+        expander.on('expanded',
+            (originalUrl, expandedUrl) ->
+                platform = new geist.Reddit expandedUrl
+                platform.fetch()
+                platform.on('activity', (activity) ->
+                    client.send activity
+                )
+            )
+        console.log "message data: #{data}"
     )
     client.on('disconnect', () ->
     )

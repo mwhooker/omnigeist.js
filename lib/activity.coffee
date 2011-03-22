@@ -28,8 +28,8 @@ class Reddit extends events.EventEmitter
                 uri: url.format(activity_url)
                 , (err, res, body) =>
                     if err?
-                        @emit('error', err)
                         console.log err
+                        @emit('error', err)
                     else
                         body = JSON.parse(body)
                         comments = new r.Comments body
@@ -62,8 +62,8 @@ class Reddit extends events.EventEmitter
             uri: url.format(info_url)
             , (err, res, body) =>
                 if err?
-                    @emit('error', err)
                     console.log err
+                    @emit('error', err)
                 else
                     body = JSON.parse body
                     i = new r.Info body
