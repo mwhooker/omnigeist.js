@@ -2,6 +2,7 @@ express = require 'express'
 geist = require './lib/activity'
 LRU = require 'lru-cache'
 SingleUrlExpander = require('url-expander').SingleUrlExpander
+io = require 'socket.io'
 
 app = express.createServer()
 cache = LRU()
@@ -30,7 +31,7 @@ app.configure('production', () ->
 app.get "/", (req, res) ->
     res.send 'hello, world'
 
-app.get "/top", (req, res) ->
+app.get "/top.json", (req, res) ->
     send_activity = (c_url) ->
         key = 'activity:' + c_url
         if activity = cache.get(key)
@@ -66,7 +67,15 @@ app.get "/top", (req, res) ->
                 send_activity(expandedUrl)
             )
 
-
-
 console.log "Listening on port 8000"
 app.listen 8000
+
+socket = io.listen app
+socket.on('connection', (client) ->
+    console.log 'connection'
+    client.on('message', (data) ->
+        console.log data
+    )
+    client.on('disconnect', () ->
+    )
+)
