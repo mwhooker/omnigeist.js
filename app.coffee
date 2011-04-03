@@ -48,6 +48,11 @@ app.get "/top.html", (req, res) ->
         url: url
     })
 
+app.get "/bookmarklet.js", (req, res) ->
+    res.render('bookmarklet', {
+        layout: false
+    })
+
 app.get "/top.json", (req, res) ->
     send_activity = (c_url) ->
         key = 'activity:' + c_url
