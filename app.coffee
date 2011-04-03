@@ -18,25 +18,32 @@ app.configure(() ->
     app.use(express.methodOverride())
     app.use(express.bodyParser())
     app.use(app.router)
+    app.set('view options', {
+      og_debug: false
+    })
 )
 
 app.configure('development', () ->
     app.use(express.static(__dirname + '/static/public'))
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
+
+    app.settings['view options']['host'] = 'http://localhost:8000'
+    app.settings['view options']['og_debug'] = true
 )
 
 app.configure('production', () ->
     oneYear = 31557600000
     app.use(express.static(__dirname + '/static/public', { maxAge: oneYear }))
     app.use(express.errorHandler())
+
 )
 
 app.get "/", (req, res) ->
-    res.send 'hello, world'
+    res.render('index')
 
 app.get "/top.html", (req, res) ->
     url = req.query.url
-    res.render('index', {
+    res.render('top', {
         layout: false
         url: url
     })
