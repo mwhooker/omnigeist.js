@@ -1,6 +1,10 @@
-need a cache with expirey time
-probably the best idea is an http client with valid caching behavior
-regardless, should probably move caching behavior from controller to activity
+need a cache with expirey time probably the best idea is an http client with
+valid caching behavior regardless, should probably move caching behavior from
+controller to activity
 
 
-
+top.html
+    reduce code-duplication
+        better caching idiom to activity
+    validate client data
+    wire up a gui!
