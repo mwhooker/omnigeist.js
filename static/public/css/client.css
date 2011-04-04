@@ -1,9 +1,19 @@
 #omnigeist {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-family: "Helvetica Neue", "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif !important;
+    vertical-align: baseline;
+    line-height: 1;
+    display: block;
+
     width: 25%;
     height: 100%;
     top: 0px;
     left: 0px;
     position: fixed;
+    list-style: none;
     
     background-color: #000;
     filter:alpha(opacity=90);
@@ -16,18 +26,17 @@
     border-bottom-right-radius: 10px;
     z-index: 1000;
 }
-.omnigeist {
+.comment p {
+    font-size: small;
+    font-family: Verdana, Geneva, sans-serif;
+    color: #FFFFFF;
+    text-align: left;
+    width: inherit;
+    /*line-height: 1.2em;
+    letter-spacing: 1px;
+    word-spacing: 1px;
+    */
 }
-    .omnigeist p {
-        font-size: small;
-        font-family: Verdana, Geneva, sans-serif;
-        color: #FFFFFF;
-        text-align: left;
-        /*line-height: 1.2em;
-        letter-spacing: 1px;
-        word-spacing: 1px;
-        */
-    }
 
 span.provider {
     color: #FFF;

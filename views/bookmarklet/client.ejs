@@ -3,102 +3,60 @@
  *  check if jquery is on the page already
  */
 (function() {
-    omni_height = 150;
-    omni_width = 700;
-    _jq_script=document.createElement('script');
-    _jq_script.type='text/javascript';
-    _jq_script.src='<%= host %>/js/jquery-1.5.1.min.js';
-    document.documentElement.appendChild(_jq_script);
+  var config = {
+    height: 150,
+    width: 700
+  };
+  _jq_script=document.createElement('script');
+  _jq_script.type='text/javascript';
+  _jq_script.src='<%= host %>/js/jquery-1.5.1.min.js';
+  document.documentElement.appendChild(_jq_script);
 
-    jqueryLoaded = function(callback) {
-        tryReady = function(time_elapsed) {
-            // Continually polls to see if jQuery is loaded.
-            if (typeof $ == "undefined") { // if jQuery isn't loaded yet...
-                if (time_elapsed <= 5000) {
-                    setTimeout("tryReady(" + (time_elapsed + 200) + ")", 200);
-                } else {
-                    alert("Timed out while loading jQuery.")
-                }
-            } else {
-                // jQuery loaded successfully
-                callback();
-            }
+  jqueryLoaded = function(callback) {
+    tryReady = function(timeElapsed) {
+      // Continually polls to see if jQuery is loaded.
+      if (typeof $ == "undefined") { // if jQuery isn't loaded yet...
+        if (timeElapsed <= 5000) {
+          setTimeout("tryReady(" + (timeElapsed + 200) + ")", 200);
+        } else {
+          alert("Timed out while loading jQuery.")
         }
-        return tryReady(0);
+      } else {
+        // jQuery loaded successfully
+        callback();
+      }
     }
+    return tryReady(0);
+  }
 
-    omnigeist_tpl = '<%- partial('client_tpl.jade') %>';
-    comment_tpl = '<%- partial('comment_tpl.jade') %>';
+  var omnigeistTpl = '<%-: partial('client_tpl.jade') | replace:"\n",'' %>';
+  var commentTpl = '<%-: partial('comment_tpl.jade') | replace:"\n",'' %>';
+  var currentUrl = window.location.href;
 
-    (function() {
-        var cache = null;
+  add_comment = function(comment) {
+    $('#' + comment.host).append(tmpl(commentTpl, comment));
+  }
 
-        this.get_comments = function get_comments(idx, provider, success, fail) {
+  main = function() {
+    $('body').append(tmpl(omnigeistTpl));
 
-            function _success(data) {
-                var provider_data;
-                if (provider in data) {
-                    provider_data = data[provider];
-                } else if (provider == undefined) {
-                    for (var p in data) {
-                        if (data[p].length) {
-                            provider_data = data[p];
-                            provider = p;
-                            break;
-                        } else {
-                            continue;
-                        }
-                    }
-                }
+    console.log('appended body');
+    var socket = new io.Socket('localhost', {port: 8000});
+    socket.on('connect', function(){ 
+      socket.send(currentUrl); 
+    }) 
+    socket.on('message', function(data){ 
+      add_comment(data);
+    })
+    socket.on('disconnect', function(){}) 
+    socket.connect();
+  }
 
-                if (provider_data == undefined || !provider_data.length) {
-                    return fail(provider);
-                }
-                success(provider_data[0], provider);
-            };
-
-            if (cache) {
-                _success(cache);
-            } else {
-                $.ajax({
-                    url: "<%= host %>/top.js",
-                    dataType: 'jsonp',
-                    data: ({idx: idx, url: window.location.href}),
-                    success: function(data) {
-                        cache = data;
-                        _success(data);
-                    }
-                });
-            }
-        };
-    })();
-
-
-    main = function() {
-        function set_comments(data, provider) {
-            $('.provider').each(function(i) {
-              if ($(this).attr('provider') == provider) { 
-                $(this).addClass('active-provider');
-              } else {
-                $(this).removeClass('active-provider');
-              }
-            });
-            $('.comment-container').replaceWith(tmpl(comment_tpl, data));
-        };
-        function fail(provider) {
-          alert("failed to load provider " + provider);
-        }
-
-        $('body').append(tmpl(omnigeist_tpl));
-        $('#provider-digg, #provider-reddit').click(function() {
-            get_comments(1, $(this).attr('provider'), set_comments, fail);
-        });
-        get_comments(1, 'reddit', set_comments, fail);
-    }
-
-    jqueryLoaded(function() {
-        $.getScript('<%= host %>/js/template.js', function() {
-            main();
-        });
+  jqueryLoaded(function() {
+    $.getScript('<%= host %>/js/template.js', function() {
+      $.getScript('<%= host %>/socket.io/socket.io.js', function() {
+        main();
+      });
     });
+  });
 })();

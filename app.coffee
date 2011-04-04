@@ -126,7 +126,7 @@ socket.on('connection', (client) ->
                         cache.set(key, buffer)
                     )
             )
-        console.log "message data: #{data}"
+        console.log "message data: #{url}"
     )
     client.on('disconnect', () ->
     )
