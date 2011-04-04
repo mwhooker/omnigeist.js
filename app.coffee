@@ -9,18 +9,6 @@ eco = require 'eco'
 app = express.createServer()
 cache = LRU()
 
-"""
-  app.register('.md', {
-    compile: function(str, options){
-      var html = md.toHTML(str);
-      return function(locals){
-        return html.replace(/\{([^}]+)\}/g, function(_, name){
-          return locals[name];
-        });
-      };
-    }
-  });
-"""
 app.configure(() ->
     coffeeDir = __dirname + '/static/coffee'
     publicDir = __dirname + '/static/public/js/lib'
@@ -72,6 +60,7 @@ app.get "/bookmarklet.js", (req, res) ->
         layout: false
     )
 
+'''
 app.get "/top.json", (req, res) ->
     send_activity = (c_url) ->
         key = 'activity:' + c_url
@@ -107,6 +96,7 @@ app.get "/top.json", (req, res) ->
                 cache.set(req.query.url, expandedUrl)
                 send_activity(expandedUrl)
             )
+'''
 
 console.log "Listening on port 8000"
 app.listen 8000
@@ -114,16 +104,27 @@ app.listen 8000
 socket = io.listen app
 socket.on('connection', (client) ->
     console.log 'connection'
-    client.on('message', (data) ->
-        expander = new SingleUrlExpander(data)
+    client.on('message', (url) ->
+        expander = new SingleUrlExpander(url)
         expander.expand()
         expander.on('expanded',
             (originalUrl, expandedUrl) ->
-                platform = new geist.Reddit expandedUrl
-                platform.fetch()
-                platform.on('activity', (activity) ->
-                    client.send activity
-                )
+                
+                key = 'activity:' + expandedUrl
+                if activity = cache.get key
+                    for a in activity
+                        client.send a
+                else
+                    platform = new geist.Reddit expandedUrl
+                    platform.fetch()
+                    buffer = []
+                    platform.on('activity', (activity) ->
+                        buffer.push activity
+                        client.send activity
+                    )
+                    platform.on('done', () ->
+                        cache.set(key, buffer)
+                    )
             )
         console.log "message data: #{data}"
     )
