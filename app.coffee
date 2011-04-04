@@ -4,14 +4,32 @@ geist = require './lib/activity'
 LRU = require 'lru-cache'
 SingleUrlExpander = require('url-expander').SingleUrlExpander
 io = require 'socket.io'
+eco = require 'eco'
 
 app = express.createServer()
 cache = LRU()
 
+"""
+  app.register('.md', {
+    compile: function(str, options){
+      var html = md.toHTML(str);
+      return function(locals){
+        return html.replace(/\{([^}]+)\}/g, function(_, name){
+          return locals[name];
+        });
+      };
+    }
+  });
+"""
 app.configure(() ->
     coffeeDir = __dirname + '/static/coffee'
     publicDir = __dirname + '/static/public/js/lib'
     app.use express.compiler(src: coffeeDir, dest: publicDir, enable: ['coffeescript'])
+
+    app.register '.eco',
+        compile: (str, options) ->
+            (locals) ->
+                eco.compile(str, locals)
 
     app.set('view engine', 'jade')
     app.set('views', __dirname + '/views')
@@ -49,9 +67,10 @@ app.get "/top.html", (req, res) ->
     })
 
 app.get "/bookmarklet.js", (req, res) ->
-    res.render('bookmarklet', {
+    res.contentType 'js'
+    res.render('bookmarklet/client.ejs',
         layout: false
-    })
+    )
 
 app.get "/top.json", (req, res) ->
     send_activity = (c_url) ->

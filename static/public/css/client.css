@@ -1,0 +1,41 @@
+#omnigeist {
+    width: 25%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    
+    background-color: #000;
+    filter:alpha(opacity=90);
+    -moz-opacity:0.90;
+    -khtml-opacity: 0.90;
+    opacity: 0.90;
+    -moz-bordera-top-right-radius: 10px;
+    -moz-bordera-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 1000;
+}
+.omnigeist {
+}
+    .omnigeist p {
+        font-size: small;
+        font-family: Verdana, Geneva, sans-serif;
+        color: #FFFFFF;
+        text-align: left;
+        /*line-height: 1.2em;
+        letter-spacing: 1px;
+        word-spacing: 1px;
+        */
+    }
+
+span.provider {
+    color: #FFF;
+    background-color: gray;
+    border: 1px;
+    margin: 2px 5px 2px 5px;
+}
+
+span.active-provider {
+    background-color: #CCC;
+}
