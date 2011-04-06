@@ -6,13 +6,13 @@
     vertical-align: baseline;
     line-height: 1;
     display: block;
+    list-style: none;
 
     width: 25%;
     height: 100%;
     top: 0px;
     left: 0px;
     position: fixed;
-    list-style: none;
     
     background-color: #000;
     filter:alpha(opacity=90);
@@ -25,7 +25,19 @@
     border-bottom-right-radius: 10px;
     z-index: 1000;
 }
-.comment p {
+
+#og-comments {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    line-height: 1;
+    display: block;
+    list-style: none;
+}
+
+.og-comment p {
     margin: 10px 10px 0px 5px;
     border-bottom: thin outset #EEE;
     text-align: justify;

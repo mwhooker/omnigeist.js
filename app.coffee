@@ -54,49 +54,11 @@ app.get "/top.html", (req, res) ->
         url: url
     })
 
-app.get "/bookmarklet.js", (req, res) ->
+app.get "/templates.js", (req, res) ->
     res.contentType 'js'
-    res.render('bookmarklet/client.ejs',
+    res.render('bookmarklet/templates.ejs',
         layout: false
     )
-
-'''
-app.get "/top.json", (req, res) ->
-    send_activity = (c_url) ->
-        key = 'activity:' + c_url
-        if activity = cache.get(key)
-            console.log "found cached value for #{ c_url }"
-            for a in activity
-                res.write(JSON.stringify(a))
-                res.write('\n')
-            res.end()
-        else
-            all_activity = []
-            platform = new geist.Reddit c_url
-            platform.fetch()
-            platform.on('activity', (activity) ->
-                console.log 'event activity'
-                all_activity.push activity
-                res.write(JSON.stringify(activity))
-                res.write('\n')
-            )
-            platform.on('done', () ->
-                console.log "done"
-                cache.set(key, all_activity)
-                res.end()
-            )
-
-    if c_url = cache.get(req.query.url)
-        send_activity(c_url)
-    else
-        expander = new SingleUrlExpander(req.query.url)
-        expander.expand()
-        expander.on('expanded',
-            (originalUrl, expandedUrl) ->
-                cache.set(req.query.url, expandedUrl)
-                send_activity(expandedUrl)
-            )
-'''
 
 console.log "Listening on port 8000"
 app.listen 8000
