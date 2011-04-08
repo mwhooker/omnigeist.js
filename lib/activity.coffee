@@ -8,6 +8,74 @@ events = require 'events'
 class UserActivity
     constructor: (@host, @link, @permalink, @username, @comment, @timestamp, @rank, @others...) ->
 
+class HackerNews extends events.EventEmitter
+    @base_url = 'http://api.ihackernews.com'
+    @host_url = 'http://news.ycombinator.com'
+
+    permalink: (id) ->
+        permalink = url.parse(HackerNews.host_url)
+        permalink.path = 'item'
+        permalink.query = {id: id}
+        return url.format(permalink)
+
+    constructor: (@c_url) ->
+
+    fetch: () ->
+
+        completed_requests = 0
+        total_requests = 0
+
+        get_activity = (item_id) =>
+            activity_url = url.parse HackerNews.base_url
+            activity_url.pathname =  'post/' + item_id
+            console.log "requesting activity from #{ url.format activity_url }"
+            request(
+                uri: url.format(activity_url)
+                , (err, res, body) =>
+                    if err?
+                        console.log err
+                        @emit('error', err)
+                    else
+                        body = JSON.parse(body)
+                        activity = []
+                        for comment in body.comments
+                            activity.push new UserActivity(
+                                'hacker news',
+                                @c_url,
+                                this.permalink(item_id),
+                                comment.postedBy,
+                                comment.comment,
+                                comment.postedAgo,
+                                comment.points
+                            )
+                        if activity.length
+                            console.log "got back some activity: #{ activity }"
+                            @emit('activity', activity)
+
+                    completed_requests += 1
+                    console.log completed_requests
+                    console.log total_requests
+                    if completed_requests == total_requests
+                        @emit('done')
+                )
+
+        id_url = url.parse HackerNews.base_url
+        id_url.pathname =  'getid'
+        id_url.query = {url: @c_url}
+        request(
+            uri: url.format(id_url)
+            , (err, res, body) =>
+                if err?
+                    console.log err
+                    @emit('error', err)
+                else
+                    body = JSON.parse body
+                    total_requests = body.length
+                    for id in body
+                        get_activity(id)
+            )
+
+
 
 class Reddit extends events.EventEmitter
 
@@ -73,3 +141,4 @@ class Reddit extends events.EventEmitter
             )
 
 exports.Reddit = Reddit
+exports.HackerNews = HackerNews
