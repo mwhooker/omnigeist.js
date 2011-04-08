@@ -1,5 +1,6 @@
-div(class='og-comment')
-  span
+div(class='comment')
+  span(class="rank")
     |<%=rank%>
-  p
-    |<%=comment%><br />&mdash; <%=username%>
+  span(class="comment-content")
+    p
+      |<%=comment%><br />&mdash; <%=username%>

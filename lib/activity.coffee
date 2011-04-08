@@ -40,7 +40,7 @@ class Reddit extends events.EventEmitter
                                 @c_url,
                                 permalink,
                                 comment.author,
-                                comment.body,
+                                comment.body_html,
                                 comment.created_utc,
                                 comment.ups
                             )

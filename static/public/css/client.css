@@ -13,6 +13,7 @@
     top: 0px;
     left: 0px;
     position: fixed;
+    overflow: auto;
     
     background-color: #000;
     filter:alpha(opacity=90);
@@ -36,23 +37,38 @@
     display: block;
     list-style: none;
 }
+  #og-comments li {
+    width: inherit;
+  }
 
-.og-comment p {
+  #og-comments .comment {
+    color: #ccc;
+    padding-bottom: 10px;
     margin: 10px 10px 0px 5px;
     border-bottom: thin outset #EEE;
-    text-align: justify;
-    padding-bottom: 10px;
-    font-size: small;
-    font-family: Verdana, Geneva, sans-serif;
-    color: #ccc;
-    text-align: left;
-    width: inherit;
-    line-height: 1.5em
-    /*line-height: 1.2em;
-    letter-spacing: 1px;
-    word-spacing: 1px;
-    */
-}
+    clear: both;
+  }
+
+  #og-comments .rank {
+    color: white;
+  }
+
+  #og-coments .comment-content {
+    margin-left: 10px;
+  }
+
+    #og-comments .comment-content p{
+      width: inherit;
+      text-align: justify;
+      font-size: small;
+      font-family: Verdana, Geneva, sans-serif;
+      text-align: left;
+      line-height: 1.5em
+      /*line-height: 1.2em;
+      letter-spacing: 1px;
+      word-spacing: 1px;
+      */
+    }
 
 span.provider {
     color: #FFF;

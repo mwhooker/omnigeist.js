@@ -60,7 +60,7 @@
     });
 
     window.og.CommentView = Backbone.View.extend({
-      className: 'li',
+      tagName: 'li',
 
       template: _.template(commentTpl),
 
@@ -98,7 +98,8 @@
       },
     });
 
-    $('body').append(_.template(omnigeistTpl));
+    //can I do this?
+    $('html').append(_.template(omnigeistTpl));
     window.og.App = new window.og.Omnigeist;
 
     var socket = new io.Socket('localhost', {port: 8000});
@@ -107,7 +108,6 @@
     }) 
     socket.on('message', function(data){ 
         var comment = new window.og.Comment(data);
-        comments.add(comment);
         window.og.App.addOne(comment);
     })
     socket.on('disconnect', function(){}) 
