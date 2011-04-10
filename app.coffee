@@ -1,13 +1,15 @@
 jade = require 'jade'
 express = require 'express'
 geist = require './lib/activity'
-LRU = require 'lru-cache'
 SingleUrlExpander = require('url-expander').SingleUrlExpander
 io = require 'socket.io'
 eco = require 'eco'
+_ = require 'underscore'
+redis = require 'redis'
 
 app = express.createServer()
-cache = LRU()
+redisClient = redis.createClient(6379, 'localhost');
+
 
 app.configure(() ->
     coffeeDir = __dirname + '/static/coffee'
@@ -71,25 +73,51 @@ socket.on('connection', (client) ->
         expander.expand()
         expander.on('expanded',
             (originalUrl, expandedUrl) ->
-                
-                key = 'activity:' + expandedUrl
-                if activity = cache.get key
-                    for a in activity
-                        client.send a
-                else
-                    platform = new geist.Reddit expandedUrl
-                    platform.fetch()
-                    buffer = []
-                    platform.on('activity', (activity) ->
-                        buffer.push activity
-                        client.send activity
-                    )
-                    platform.on('done', () ->
-                        cache.set(key, buffer)
-                    )
+              fanout(expandedUrl, (activity) ->
+                client.send(activity)
+              )
             )
         console.log "message data: #{url}"
     )
     client.on('disconnect', () ->
     )
 )
+
+class ActivityCache
+    constructor: (url) ->
+        @urlKey = 'activity_cache:' + url
+        #@platformKey = platformName + ':cache'
+
+    get: (success, miss) ->
+        redisClient.lrange(@urlKey, 0, -1, (err, reply) =>
+            if err?
+                console.error("error fetching activity from cache: " + err)
+            else
+                if reply.length
+                    success(_.map(reply, JSON.parse))
+                else
+                    miss(this)
+        )
+
+    addActivity: (activity) ->
+        console.debug('adding activity to ' + @urlKey)
+        redisClient.lpush(@urlKey, JSON.stringify(activity))
+
+
+fanout = (expandedUrl, callback) ->
+    cache = new ActivityCache(expandedUrl)
+    cache.get(
+        (activity) ->
+            _.each(activity, (i) ->
+                callback(i)
+            )
+        ,(cache) ->
+            _.each([geist.Reddit, geist.HackerNews], (platform) ->
+                p = new platform expandedUrl
+                p.fetch()
+                p.on('activity', (activity) ->
+                    cache.addActivity(activity)
+                    callback(activity)
+                )
+            )
+    )
