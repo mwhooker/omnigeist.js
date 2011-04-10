@@ -22,9 +22,6 @@ class HackerNews extends events.EventEmitter
 
     fetch: () ->
 
-        completed_requests = 0
-        total_requests = 0
-
         get_activity = (item_id) =>
             activity_url = url.parse HackerNews.base_url
             activity_url.pathname =  'post/' + item_id
@@ -52,11 +49,6 @@ class HackerNews extends events.EventEmitter
                             console.log "got back some activity: #{ activity }"
                             @emit('activity', activity)
 
-                    completed_requests += 1
-                    console.log completed_requests
-                    console.log total_requests
-                    if completed_requests == total_requests
-                        @emit('done')
                 )
 
         id_url = url.parse HackerNews.base_url
@@ -70,7 +62,6 @@ class HackerNews extends events.EventEmitter
                     @emit('error', err)
                 else
                     body = JSON.parse body
-                    total_requests = body.length
                     for id in body
                         get_activity(id)
             )
@@ -85,8 +76,6 @@ class Reddit extends events.EventEmitter
 
     fetch: () ->
 
-        completed_requests = 0
-        total_requests = 0
 
         get_activity = (permalink) =>
             console.log "requesting activity from #{ permalink }"
@@ -116,11 +105,6 @@ class Reddit extends events.EventEmitter
                             console.log "got back some activity: #{ activity }"
                             @emit('activity', activity)
 
-                    completed_requests += 1
-                    console.log completed_requests
-                    console.log total_requests
-                    if completed_requests == total_requests
-                        @emit('done')
                 )
 
         info_url = url.parse Reddit.base_url
@@ -135,7 +119,6 @@ class Reddit extends events.EventEmitter
                 else
                     body = JSON.parse body
                     i = new r.Info body
-                    total_requests = i.permalinks.length
                     for permalink in i.permalinks
                         get_activity(permalink)
             )

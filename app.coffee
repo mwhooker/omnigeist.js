@@ -100,7 +100,7 @@ class ActivityCache
         )
 
     addActivity: (activity) ->
-        console.debug('adding activity to ' + @urlKey)
+        console.log('adding activity to ' + @urlKey)
         redisClient.lpush(@urlKey, JSON.stringify(activity))
 
 
