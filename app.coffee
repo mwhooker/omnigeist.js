@@ -8,7 +8,7 @@ _ = require 'underscore'
 redis = require 'redis'
 
 app = express.createServer()
-redisClient = redis.createClient(6379, 'localhost');
+redisClient = redis.createClient(6379, 'localhost')
 
 
 app.configure(() ->
@@ -84,9 +84,10 @@ socket.on('connection', (client) ->
 )
 
 class ActivityCache
-    constructor: (url) ->
+    constructor: (url, @ttl) ->
         @urlKey = 'activity_cache:' + url
-        #@platformKey = platformName + ':cache'
+        if not @ttl?
+            @ttl = 120
 
     get: (success, miss) ->
         redisClient.lrange(@urlKey, 0, -1, (err, reply) =>
@@ -102,22 +103,27 @@ class ActivityCache
     addActivity: (activity) ->
         console.log('adding activity to ' + @urlKey)
         redisClient.lpush(@urlKey, JSON.stringify(activity))
+        if @ttl > 0
+            redisClient.expire(@urlKey, @ttl)
 
 
 fanout = (expandedUrl, callback) ->
-    cache = new ActivityCache(expandedUrl)
+    cache = new ActivityCache(expandedUrl, 0)
     cache.get(
         (activity) ->
             _.each(activity, (i) ->
                 callback(i)
             )
         ,(cache) ->
-            _.each([geist.Reddit, geist.HackerNews], (platform) ->
+            _.each([geist.Reddit, geist.HackerNews, geist.Digg], (platform) ->
                 p = new platform expandedUrl
                 p.fetch()
                 p.on('activity', (activity) ->
                     cache.addActivity(activity)
                     callback(activity)
+                )
+                p.on('error', (message) ->
+                    console.log('got error ' + message + '. skipping')
                 )
             )
     )

@@ -34,9 +34,8 @@ class HackerNews extends events.EventEmitter
                         @emit('error', err)
                     else
                         body = JSON.parse(body)
-                        activity = []
                         for comment in body.comments
-                            activity.push new UserActivity(
+                            activity = new UserActivity(
                                 'hacker news',
                                 @c_url,
                                 this.permalink(item_id),
@@ -45,9 +44,9 @@ class HackerNews extends events.EventEmitter
                                 comment.postedAgo,
                                 comment.points
                             )
-                        if activity.length
-                            console.log "got back some activity: #{ activity }"
                             @emit('activity', activity)
+                        if body.comments.length
+                            console.log "got back some activity"
 
                 )
 
@@ -90,9 +89,8 @@ class Reddit extends events.EventEmitter
                     else
                         body = JSON.parse(body)
                         comments = new r.Comments body
-                        activity = []
                         for comment in comments.comments
-                            activity.push new UserActivity(
+                            activity = new UserActivity(
                                 'reddit',
                                 @c_url,
                                 permalink,
@@ -101,9 +99,9 @@ class Reddit extends events.EventEmitter
                                 comment.created_utc,
                                 comment.ups
                             )
-                        if activity.length
-                            console.log "got back some activity: #{ activity }"
                             @emit('activity', activity)
+                        if comments.comments.length
+                            console.log "got back some activity"
 
                 )
 
@@ -123,5 +121,66 @@ class Reddit extends events.EventEmitter
                         get_activity(permalink)
             )
 
+class Digg extends events.EventEmitter
+    @base_url = 'http://services.digg.com'
+
+    constructor: (@c_url) ->
+
+    fetch: () ->
+        info_url = url.parse Digg.base_url
+        info_url.pathname = '/2.0/story.getInfo'
+        info_url.query = {'links': @c_url}
+        request(
+            uri: url.format(info_url)
+            , (err, res, body) =>
+                console.log(url.format(info_url))
+                if err?
+                    console.log err
+                    @emit('error', err)
+                else
+                    body = JSON.parse body
+                    if body.status >= 300
+                        console.log(body)
+                        @emit('error', body.message)
+                    else
+                        for story in body.stories
+                            get_activity(story.story_id, story.permalink)
+            )
+
+        get_activity = (story_id, permalink) =>
+            console.log "requesting activity for #{ story_id }"
+            activity_url = url.parse Digg.base_url
+            activity_url.pathname = '/2.0/story.getComments'
+            activity_url.query = {
+                story_id: story_id
+            }
+            request(
+                uri: url.format(activity_url)
+                , (err, res, body) =>
+                    if err?
+                        console.log err
+                        @emit('error', err)
+                    else
+                        body = JSON.parse(body)
+                        if body.status >= 300
+                            console.log(body)
+                            @emit('error', body.message)
+                        else
+                            for comment in body.comments
+                                activity = new UserActivity(
+                                    'digg',
+                                    @c_url,
+                                    permalink,
+                                    comment.user.username,
+                                    comment.text,
+                                    comment.date_created,
+                                    comment.up
+                                )
+                                @emit('activity', activity)
+                            if body.comments.length
+                                console.log "got back some activity"
+                )
+
+exports.Digg = Digg
 exports.Reddit = Reddit
 exports.HackerNews = HackerNews
