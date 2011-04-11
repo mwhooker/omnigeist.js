@@ -6,15 +6,16 @@ io = require 'socket.io'
 eco = require 'eco'
 _ = require 'underscore'
 redis = require 'redis'
+less = require 'less'
 
 app = express.createServer()
 redisClient = redis.createClient(6379, 'localhost')
 
 
 app.configure(() ->
-    #coffeeDir = __dirname + '/coffee'
-    publicDir = __dirname + '/static/js/lib'
-    #app.use express.compiler(src: coffeeDir, dest: publicDir, enable: ['coffeescript'])
+    staticDir = __dirname + '/static'
+    app.use express.compiler(src: '/js', enable: ['coffeescript'])
+    app.use express.compiler(src: staticDir, enable: ['less'])
 
     app.register '.eco',
         compile: (str, options) ->
