@@ -12,9 +12,9 @@ redisClient = redis.createClient(6379, 'localhost')
 
 
 app.configure(() ->
-    coffeeDir = __dirname + '/static/coffee'
-    publicDir = __dirname + '/static/public/js/lib'
-    app.use express.compiler(src: coffeeDir, dest: publicDir, enable: ['coffeescript'])
+    #coffeeDir = __dirname + '/coffee'
+    publicDir = __dirname + '/static/js/lib'
+    #app.use express.compiler(src: coffeeDir, dest: publicDir, enable: ['coffeescript'])
 
     app.register '.eco',
         compile: (str, options) ->
@@ -32,7 +32,7 @@ app.configure(() ->
 )
 
 app.configure('development', () ->
-    app.use(express.static(__dirname + '/static/public'))
+    app.use(express.static(__dirname + '/static'))
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 
     app.settings['view options']['host'] = 'http://localhost:8000'
@@ -41,7 +41,7 @@ app.configure('development', () ->
 
 app.configure('production', () ->
     oneYear = 31557600000
-    app.use(express.static(__dirname + '/static/public', { maxAge: oneYear }))
+    app.use(express.static(__dirname + '/static', { maxAge: oneYear }))
     app.use(express.errorHandler())
 
 )
