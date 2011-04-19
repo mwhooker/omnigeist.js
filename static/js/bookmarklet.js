@@ -115,13 +115,12 @@
   }
 
   jqueryLoaded(function() {
-    $.getScript(ogHost + '/js/underscore-min.js', function() {
-      loadScripts([
-        ogHost + '/templates.js',
-        ogHost + '/js/json2.js',
-        ogHost + '/js/backbone.js',
-        ogHost + '/socket.io/socket.io.js',
-      ], main);
-    });
+    loadScripts([
+      ogHost + '/js/underscore-min.js',
+      ogHost + '/templates.js',
+      ogHost + '/js/json2.js',
+      ogHost + '/js/backbone.js',
+      ogHost + '/socket.io/socket.io.js',
+    ], main);
   });
 })();
