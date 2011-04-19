@@ -9,8 +9,8 @@ class UserActivity
     constructor: (@host, @link, @permalink, @username, @comment, @timestamp, @rank, @others...) ->
 
 class HackerNews extends events.EventEmitter
-    @base_url = 'http://api.ihackernews.com'
-    @host_url = 'http://news.ycombinator.com'
+    @base_url: 'http://api.ihackernews.com'
+    @host_url: 'http://news.ycombinator.com'
 
     permalink: (id) ->
         permalink = url.parse(HackerNews.host_url)
@@ -69,7 +69,7 @@ class HackerNews extends events.EventEmitter
 
 class Reddit extends events.EventEmitter
 
-    @base_url = 'http://www.reddit.com'
+    @base_url:'http://www.reddit.com'
 
     constructor: (@c_url) ->
 
@@ -122,7 +122,7 @@ class Reddit extends events.EventEmitter
             )
 
 class Digg extends events.EventEmitter
-    @base_url = 'http://services.digg.com'
+    @base_url: 'http://services.digg.com'
 
     constructor: (@c_url) ->
 
