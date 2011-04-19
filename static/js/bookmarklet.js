@@ -44,8 +44,21 @@
       });
     }
   }
-
   var main = function() {
+    Hyphenator.config({
+      defaultlanguage: 'en',
+      minwordlength: 4,
+      remoteloading: true,
+      enablecache: false,
+      onerrorhandler: function(error) {
+        console.log(error);
+      },
+      selectorfunction: function () {
+        return $('#og-comments .comment-content').get();
+      }
+    });
+    Hyphenator.run();
+
     var commentTpl = window.og['commentTpl'];
     var omnigeistTpl = window.og['omnigeistTpl'];
 
@@ -98,8 +111,7 @@
       },
     });
 
-    //can I do this?
-    $('html').append(_.template(omnigeistTpl));
+    $('body').append(_.template(omnigeistTpl));
     window.og.App = new window.og.Omnigeist;
 
     var socket = new io.Socket('localhost', {port: 8000});
@@ -121,6 +133,7 @@
         ogHost + '/templates.js',
         ogHost + '/js/json2.js',
         ogHost + '/js/backbone.js',
+        ogHost + '/js/Hyphenator.js',
         ogHost + '/socket.io/socket.io.js',
       ], main);
     });

@@ -3,6 +3,7 @@ div(class='comment')
     |<%=rank%>
   span
     |<%=host%>
-  span(class="comment-content")
-    p
-      |<%=comment%><br />&mdash; <%=username%>
+  div(class="comment-content")
+    |<%=comment%>
+  div(class="comment-author")
+    &mdash; <%=username%>
