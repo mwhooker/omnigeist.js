@@ -1,1 +1,14 @@
-need to do reverse url shortening -- pass it an expanded url, go out and find all the possible short-urls, and use those to see the fanout
+need to do reverse url shortening -- pass it an expanded url, go out and find
+all the possible short-urls, and use those to seed the fanout
+
+line-wrap URLs
+
+justify comments
+
+rewrite hrefs to use my bit.ly api key, but make sure url text remains unchanged
+
+expand short URLs?
+
+ditch jquery in favor of lighter-weight frameworks:
+http://mir.aculo.us/2011/04/11/i-for-one-welcome-our-new-micro-framework-overlords/
+
