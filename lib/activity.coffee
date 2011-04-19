@@ -29,7 +29,7 @@ class HackerNews extends events.EventEmitter
             request(
                 uri: url.format(activity_url)
                 , (err, res, body) =>
-                    if err?
+                    if err? or res.statusCode >= 400
                         console.log err
                         @emit('error', err)
                     else
@@ -56,7 +56,7 @@ class HackerNews extends events.EventEmitter
         request(
             uri: url.format(id_url)
             , (err, res, body) =>
-                if err?
+                if err? or res.statusCode >= 400
                     console.log err
                     @emit('error', err)
                 else
@@ -83,11 +83,11 @@ class Reddit extends events.EventEmitter
             request(
                 uri: url.format(activity_url)
                 , (err, res, body) =>
-                    if err?
+                    if err? or res.statusCode >= 400
                         console.log err
                         @emit('error', err)
                     else
-                        body = JSON.parse(body)
+                        body = JSON.parse body
                         comments = new r.Comments body
                         for comment in comments.comments
                             activity = new UserActivity(
@@ -111,7 +111,7 @@ class Reddit extends events.EventEmitter
         request(
             uri: url.format(info_url)
             , (err, res, body) =>
-                if err?
+                if err? or res.statusCode >= 400
                     console.log err
                     @emit('error', err)
                 else
@@ -134,12 +134,12 @@ class Digg extends events.EventEmitter
             uri: url.format(info_url)
             , (err, res, body) =>
                 console.log(url.format(info_url))
-                if err?
+                if err? or res.statusCode >= 400
                     console.log err
                     @emit('error', err)
                 else
                     body = JSON.parse body
-                    if body.status >= 300
+                    if body.status >= 400
                         console.log(body)
                         @emit('error', body.message)
                     else
@@ -157,12 +157,12 @@ class Digg extends events.EventEmitter
             request(
                 uri: url.format(activity_url)
                 , (err, res, body) =>
-                    if err?
+                    if err? or res.statusCode >= 400
                         console.log err
                         @emit('error', err)
                     else
                         body = JSON.parse(body)
-                        if body.status >= 300
+                        if body.status >= 400
                             console.log(body)
                             @emit('error', body.message)
                         else
