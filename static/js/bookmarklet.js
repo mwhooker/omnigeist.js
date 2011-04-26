@@ -104,7 +104,7 @@
 
       addOne: function(comment) {
         var view = new window.og.CommentView({model: comment});
-        $('#og-comments').append(view.render().el);
+        $('#og-comments ul').append(view.render().el);
       },
 
       addAll: function() {
