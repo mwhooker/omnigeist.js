@@ -44,6 +44,7 @@
       });
     }
   }
+
   var main = function() {
     Hyphenator.config({
       defaultlanguage: 'en',
@@ -111,7 +112,7 @@
       },
     });
 
-    $('body').append(_.template(omnigeistTpl));
+    $('html').append(_.template(omnigeistTpl));
     window.og.App = new window.og.Omnigeist;
 
     var socket = new io.Socket('localhost', {port: 8000});
