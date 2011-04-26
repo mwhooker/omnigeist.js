@@ -1,14 +1,22 @@
 need to do reverse url shortening -- pass it an expanded url, go out and find
 all the possible short-urls, and use those to seed the fanout
 
-line-wrap URLs
-
-justify comments
-
-rewrite hrefs to use my bit.ly api key, but make sure url text remains unchanged
-
-expand short URLs?
+rewrite hrefs in comments to use my bit.ly api key, but make sure url text remains unchanged
 
 ditch jquery in favor of lighter-weight frameworks:
 http://mir.aculo.us/2011/04/11/i-for-one-welcome-our-new-micro-framework-overlords/
 
+
+
+UI
+  close button
+  expand short URLs in comments?
+
+  tabs
+    make them look like tabs (color, corners)
+    add story count
+    automatically add tabs to the dom depending on which sources we get back
+    add source icon to tab?
+    wire them up
+
+  let user resize horizontal dimensions
