@@ -1,17 +1,7 @@
 #omnigeist {
-  /*
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    line-height: 1;
-    display: block;
-    list-style: none;
-    */
     z-index: 1000;
 
-    width: 25%;
+    width: 30%;
     height: 100%;
     top: 0px;
     left: 0px;
@@ -22,8 +12,16 @@
     opacity: 0.90;
 }
 
-#omnigeist p, li {
+#omnigeist p, ul, li {
     width: inherit;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    line-height: 1;
+    display: block;
+    list-style: none;
 }
 
 #og-tabs {
@@ -55,7 +53,7 @@
     color: white;
   }
 
-  #og-comments .comment-content {
+  #og-comments .comment-content p {
     margin-left: 10px;
 
     text-align: justify;
@@ -68,14 +66,3 @@
     word-spacing: 1px;
     */
   }
-
-span.provider {
-    color: #FFF;
-    background-color: gray;
-    border: 1px;
-    margin: 2px 5px 2px 5px;
-}
-
-span.active-provider {
-    background-color: #CCC;
-}
