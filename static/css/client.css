@@ -60,8 +60,8 @@
     text-align: justify;
     font-size: small;
     font-family: Verdana, Geneva, sans-serif;
-    text-align: left;
-    line-height: 1.5em
+    line-height: 1.5em;
+    -webkit-hyphens: auto;
     /*line-height: 1.2em;
     letter-spacing: 1px;
     word-spacing: 1px;
