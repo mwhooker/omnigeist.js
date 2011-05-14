@@ -90,13 +90,13 @@ class ActivityCache
         if not @ttl?
             @ttl = 120
 
-    get: (success, miss) ->
+    get: (hit, miss) ->
         redisClient.lrange(@urlKey, 0, -1, (err, reply) =>
             if err?
                 console.error("error fetching activity from cache: " + err)
             else
                 if reply.length
-                    success(_.map(reply, JSON.parse))
+                    hit(_.map(reply, JSON.parse))
                 else
                     miss(this)
         )
@@ -107,6 +107,8 @@ class ActivityCache
         if @ttl > 0
             redisClient.expire(@urlKey, @ttl)
 
+logActivity = (activity) ->
+  console.log JSON.stringify(activity)
 
 fanout = (expandedUrl, callback) ->
     cache = new ActivityCache(expandedUrl, 0)
@@ -121,6 +123,7 @@ fanout = (expandedUrl, callback) ->
                 p.fetch()
                 p.on('activity', (activity) ->
                     cache.addActivity(activity)
+                    logActivity(activity)
                     callback(activity)
                 )
                 p.on('error', (message) ->

@@ -5,6 +5,8 @@ rewrite hrefs in comments to use my bit.ly api key, but make sure url text remai
 
 ditch jquery in favor of lighter-weight frameworks:
 http://mir.aculo.us/2011/04/11/i-for-one-welcome-our-new-micro-framework-overlords/
+OR
+ rename $ to $omnigeist to prevent conflicts?
 
 
 
