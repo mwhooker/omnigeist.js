@@ -58,7 +58,7 @@
         return $('#og-comments .comment-content').get();
       }
     });
-    Hyphenator.run();
+    //Hyphenator.run();
 
     var commentTpl = window.og['commentTpl'];
     var omnigeistTpl = window.og['omnigeistTpl'];
@@ -100,6 +100,10 @@
 
         comments.bind('add',     this.addOne);
         comments.bind('all',     this.render);
+
+        $('#og-close').click(function() {
+          $('#omnigeist').hide();
+        });
       },
 
       addOne: function(comment) {
