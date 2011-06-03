@@ -1,0 +1,17 @@
+{
+  "name": "Omnigeist",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "2.2.0",
+    "jade": "0.10.3",
+    "url-expander": "0.0.9",
+    "socket.io": "0.6.17",
+    "eco": "1.0.3",
+    "underscore": "1.1.5",
+    "redis": "0.5.9",
+    "less": "1.0.41",
+    "request": "1.9.5",
+    "spec": "1.0.0",
+    "coffee-script": "1.0.1"
+  }
+}
