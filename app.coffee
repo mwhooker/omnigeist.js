@@ -8,7 +8,7 @@ _ = require 'underscore'
 redis = require 'redis'
 less = require 'less'
 
-app = express.createServer()
+app = express.createServer(express.logger())
 
 app.configure(() ->
     staticDir = __dirname + '/static'
