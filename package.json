@@ -11,7 +11,8 @@
     "redis": "0.5.9",
     "less": "1.0.41",
     "request": "1.9.5",
-    "spec": "1.0.0",
-    "coffee-script": "1.0.1"
+    "spec": "1.0.0rc3",
+    "coffee-script": "1.0.1",
+    "ejs": "0.4.2"
   }
 }

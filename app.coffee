@@ -9,8 +9,6 @@ redis = require 'redis'
 less = require 'less'
 
 app = express.createServer()
-redisClient = redis.createClient(6379, 'localhost')
-
 
 app.configure(() ->
     staticDir = __dirname + '/static'
@@ -36,12 +34,26 @@ app.configure('development', () ->
     app.use(express.static(__dirname + '/static'))
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 
+    app.set('port', 8000)
+    app.set('redis', {
+        port: 6379
+        host: 'localhost'
+    })
+
     app.settings['view options']['host'] = 'http://localhost:8000'
     app.settings['view options']['og_debug'] = true
 )
 
 app.configure('production', () ->
+    app.set('port', 80)
+    app.set('redis', {
+        port: 9431
+        host: 'bass.redistogo.com'
+        auth: process.env.REDIS_AUTH
+    })
     oneYear = 31557600000
+    app.settings['view options']['host'] =
+        'http://empty-sunset-309.herokuapp.com'
     app.use(express.static(__dirname + '/static', { maxAge: oneYear }))
     app.use(express.errorHandler())
 
@@ -63,8 +75,15 @@ app.get "/templates.js", (req, res) ->
         layout: false
     )
 
-console.log "Listening on port 8000"
-app.listen 8000
+redisClient = redis.createClient(
+    app.set('redis').port, app.set('redis').host)
+
+if app.set('redis').auth
+    redisClient.auth(app.set('redis').auth)
+
+port = app.set('port')
+console.log "Listening on port " + port
+app.listen port
 
 socket = io.listen app
 socket.on('connection', (client) ->
