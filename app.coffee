@@ -52,8 +52,7 @@ app.configure('production', () ->
         auth: process.env.REDIS_AUTH
     })
     oneYear = 31557600000
-    app.settings['view options']['host'] =
-        'http://empty-sunset-309.herokuapp.com'
+    app.settings['view options']['host'] = 'http://omnigeist.com'
     app.use(express.static(__dirname + '/static', { maxAge: oneYear }))
     app.use(express.errorHandler())
 
