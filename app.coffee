@@ -34,7 +34,6 @@ app.configure('development', () ->
     app.use(express.static(__dirname + '/static'))
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 
-    app.set('port', 8000)
     app.set('redis', {
         port: 6379
         host: 'localhost'
@@ -45,7 +44,6 @@ app.configure('development', () ->
 )
 
 app.configure('production', () ->
-    app.set('port', 80)
     app.set('redis', {
         port: 9431
         host: 'bass.redistogo.com'
@@ -80,7 +78,7 @@ redisClient = redis.createClient(
 if app.set('redis').auth
     redisClient.auth(app.set('redis').auth)
 
-port = app.set('port')
+port = parseInt(process.env.PORT || 8000)
 console.log "Listening on port " + port
 app.listen port
 
