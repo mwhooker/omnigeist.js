@@ -1,2 +1,21 @@
-h1 Get the bookmarklet
-!=partial('bookmarklet_script', {})
+h1 Omnigeist - What people are saying.
+h2 Where am I? What is this?
+p
+  | Omnigeist is a bookmarklet for finding out what people are saying about any given URL.
+
+#example
+  a(href="/image/og_example.png")
+    img(src='/image/og_example.thumb.small.png', alt="example")
+  p Example of Omnigeist in action. Click to see a larger image.
+
+
+p For more information on bookmarklets, see 
+  a(href="http://en.wikipedia.org/wiki/Bookmarklet") wikipedia
+h2 Get the bookmarklet
+div
+  p
+    | Drag this link to your bookmarks bar
+    a(href=partial('bookmarklet_script', {})) Bookmarklet
+p
+  |or DIY with the bookmarklet code
+textarea(readonly)=partial('bookmarklet_script', {})
