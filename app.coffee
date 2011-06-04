@@ -29,7 +29,7 @@ app.configure(() ->
     app.use(app.router)
     app.settings['view options'] = {
       og_debug: false
-      port: 80
+      port: port
     }
 )
 
