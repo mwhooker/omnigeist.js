@@ -4,6 +4,7 @@
  */
 (function() {
   var ogHost = window.ogHost;
+  var ogPort = window.ogPort;
   var og = window.og;
   var config = {
     height: 150,
@@ -121,7 +122,7 @@
 
     var host = ogHost.split('//')[1].split(':');
 
-    var socket = new io.Socket(host[0], {port: host[1] || 80});
+    var socket = new io.Socket(host[0], {port: ogPort || 80});
     socket.on('connect', function(){ 
       socket.send(currentUrl); 
     }) 

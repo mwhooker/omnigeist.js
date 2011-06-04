@@ -11,6 +11,8 @@ less = require 'less'
 app = express.createServer(express.logger())
 
 app.configure(() ->
+    port = parseInt(process.env.PORT || 8000)
+    app.set('port', port)
     staticDir = __dirname + '/static'
     app.use express.compiler(src: '/js', enable: ['coffeescript'])
     app.use express.compiler(src: staticDir, enable: ['less'])
@@ -25,10 +27,10 @@ app.configure(() ->
     app.use(express.methodOverride())
     app.use(express.bodyParser())
     app.use(app.router)
-    app.set('view options', {
+    app.settings['view options'] = {
       og_debug: false
-    })
-    app.set('port', parseInt(process.env.PORT || 8000))
+      port: port
+    }
 )
 
 app.configure('development', () ->
