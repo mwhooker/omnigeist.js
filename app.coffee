@@ -28,6 +28,7 @@ app.configure(() ->
     app.set('view options', {
       og_debug: false
     })
+    app.set('port', parseInt(process.env.PORT || 8000))
 )
 
 app.configure('development', () ->
@@ -39,7 +40,7 @@ app.configure('development', () ->
         host: 'localhost'
     })
 
-    app.settings['view options']['host'] = 'http://localhost:8000'
+    app.settings['view options']['host'] = 'http://localhost:' + app.set('port')
     app.settings['view options']['og_debug'] = true
 )
 
@@ -78,7 +79,7 @@ redisClient = redis.createClient(
 if app.set('redis').auth
     redisClient.auth(app.set('redis').auth)
 
-port = parseInt(process.env.PORT || 8000)
+port = app.set('port')
 console.log "Listening on port " + port
 app.listen port
 

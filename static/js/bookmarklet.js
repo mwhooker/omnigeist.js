@@ -119,7 +119,9 @@
     $('html').append(_.template(omnigeistTpl));
     window.og.App = new window.og.Omnigeist;
 
-    var socket = new io.Socket('localhost', {port: 8000});
+    var host = ogHost.split('//')[1].split(':');
+
+    var socket = new io.Socket(host[0], {port: host[1] || 80});
     socket.on('connect', function(){ 
       socket.send(currentUrl); 
     }) 
