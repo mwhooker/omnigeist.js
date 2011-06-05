@@ -30,7 +30,6 @@ app.configure(() ->
     app.use(app.router)
     app.settings['view options'] = {
       og_debug: false
-      port: port
     }
 )
 
@@ -44,6 +43,7 @@ app.configure('development', () ->
     })
 
     app.settings['view options']['host'] = 'http://localhost:' + app.set('port')
+    app.settings['view options']['port'] = app.set('port')
     app.settings['view options']['og_debug'] = true
 )
 
@@ -55,6 +55,7 @@ app.configure('production', () ->
     })
     oneYear = 31557600000
     app.settings['view options']['host'] = 'http://omnigeist.com'
+    app.settings['view options']['port'] = 80
     app.use(express.static(__dirname + '/static', { maxAge: oneYear }))
     app.use(express.errorHandler())
 

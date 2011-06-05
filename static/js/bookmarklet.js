@@ -4,7 +4,7 @@
  */
 (function() {
   var ogHost = window.ogHost;
-  var ogPort = window.ogPort;
+  var ogPort = window.ogPort || 80;
   var og = window.og;
   var config = {
     height: 150,
