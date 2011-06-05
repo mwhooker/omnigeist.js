@@ -122,7 +122,9 @@
 
     var host = ogHost.split('//')[1].split(':');
 
-    var socket = new io.Socket(host[0], {port: ogPort || 80});
+    var socket = new io.Socket(host[0], {
+        'port': ogPort});
+
     socket.on('connect', function(){ 
       socket.send(currentUrl); 
     }) 
