@@ -150,7 +150,7 @@ fanout = (expandedUrl, callback) ->
                     callback(activity)
                 )
                 p.on('error', (message) ->
-                    console.log('got error ' + message + '. skipping')
+                    console.error('got error ' + message + '. skipping')
                 )
             )
     )
