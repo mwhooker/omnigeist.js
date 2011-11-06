@@ -2,17 +2,17 @@
   "name": "Omnigeist",
   "version": "0.0.1",
   "dependencies": {
-    "express": "2.2.0",
-    "jade": "0.10.3",
-    "url-expander": "0.0.9",
-    "socket.io": "0.6.17",
+    "express": "2.5.0",
+    "jade": "0.16.4",
+    "url-expander": "0.0.10",
+    "socket.io": "0.8.7",
     "eco": "1.0.3",
-    "underscore": "1.1.5",
-    "redis": "0.5.9",
-    "less": "1.0.41",
-    "request": "1.9.5",
+    "underscore": "1.2.1",
+    "redis": "0.6.7",
+    "less": "1.1.4",
+    "request": "2.2.0",
     "spec": "1.0.0rc3",
-    "coffee-script": "1.0.1",
-    "ejs": "0.4.2"
+    "coffee-script": "1.1.2",
+    "ejs": "0.4.3"
   }
 }
