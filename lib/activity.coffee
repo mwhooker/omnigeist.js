@@ -184,18 +184,17 @@ class Digg extends events.EventEmitter
 
 
 class Disqus extends events.EventEmitter
-
+    @dq = disqus(
+        process.env.DISQUS_PUBLIC_KEY,
+        'json',
+        '3.0',
+        false
+    )
     constructor: (@c_url) ->
-        @dq = disqus(
-            "ToCu9OEXZhNZoAq3V7aDBvaYQ5gYDjBeZ25vNjLVSGIgshZGfjuNNg9Oq3HjFEnu",
-            'json',
-            '3.0',
-            false
-        )
 
     fetch: () ->
         console.log "fetching activity for thread: " + "link:" + @c_url
-        @dq.call('posts', 'list', thread: "link:" + @c_url, (response) =>
+        Disqus.dq.call('posts', 'list', thread: "link:" + @c_url, (response) =>
             response.iter (value, key) =>
                 console.log "got activity"
                 activity = new UserActivity(
