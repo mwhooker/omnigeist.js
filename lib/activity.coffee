@@ -204,7 +204,7 @@ class Disqus extends events.EventEmitter
                     @c_url + "#disqus_thread",
                     value.author.username,
                     value.message,
-                    null, #created
+                    value.createdAt,
                     value.points
                 )
                 @emit 'activity', activity
