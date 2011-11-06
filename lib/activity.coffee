@@ -3,6 +3,7 @@ r = require './reddit'
 url = require 'url'
 util = require 'util'
 events = require 'events'
+disqus = require 'disqus-client'
 
 
 class UserActivity
@@ -181,6 +182,34 @@ class Digg extends events.EventEmitter
                                 console.log "got back some activity"
                 )
 
+
+class Disqus extends events.EventEmitter
+
+    constructor: (@c_url) ->
+        @dq = disqus(
+            "ToCu9OEXZhNZoAq3V7aDBvaYQ5gYDjBeZ25vNjLVSGIgshZGfjuNNg9Oq3HjFEnu",
+            'json',
+            '3.0',
+            false
+        )
+
+    fetch: () ->
+        @dq.call('posts', 'list', thread: "link:" + @c_url, (response) ->
+            response.iter (value, key) =>
+                activity = new UserActivity(
+                    'disqus',
+                    @c_url,
+                    @c_url + "#disqus_thread",
+                    value.author.username,
+                    value.message,
+                    null, #created
+                    value.points
+                )
+        )
+
+
 exports.Digg = Digg
 exports.Reddit = Reddit
 exports.HackerNews = HackerNews
+exports.Disqus = Disqus
+
