@@ -18,7 +18,7 @@
   var jqueryLoaded = function(callback) {
     tryReady = function(timeElapsed) {
       // Continually polls to see if jQuery is loaded.
-      if (typeof $ == "undefined") { // if jQuery isn't loaded yet...
+      if (typeof jQuery == "undefined") { // if jQuery isn't loaded yet...
         if (timeElapsed <= 5000) {
           setTimeout("tryReady(" + (timeElapsed + 200) + ")", 200);
         } else {
@@ -26,6 +26,7 @@
         }
       } else {
         // jQuery loaded successfully
+        jQuery.noConflict();
         callback();
       }
     }
@@ -37,7 +38,7 @@
   var loadScripts = function(scripts, success, failure) {
     var count = 0;
     for (var i in scripts) {
-      $.getScript(scripts[i], function() {
+      jQuery.getScript(scripts[i], function() {
         count += 1;
         if (count == scripts.length) {
           success();
@@ -56,7 +57,7 @@
         console.log(error);
       },
       selectorfunction: function () {
-        return $('#og-comments .comment-content').get();
+        return jQuery('#og-comments .comment-content').get();
       }
     });
     //Hyphenator.run();
@@ -86,7 +87,7 @@
       },
 
       render: function() {
-        $(this.el).html(this.template(this.model.toJSON()));
+        jQuery(this.el).html(this.template(this.model.toJSON()));
         return this;
       }
     });
@@ -94,7 +95,7 @@
     var comments = window.og.comments = new window.og.CommentList;
 
     window.og.Omnigeist = Backbone.View.extend({
-      el: $('#omnigeist'),
+      el: jQuery('#omnigeist'),
 
       initialize: function() {
         _.bindAll(this, 'addOne', 'addAll');
@@ -102,14 +103,14 @@
         comments.bind('add',     this.addOne);
         comments.bind('all',     this.render);
 
-        $('#og-close').click(function() {
-          $('#omnigeist').hide();
+        jQuery('#og-close').click(function() {
+          jQuery('#omnigeist').hide();
         });
       },
 
       addOne: function(comment) {
         var view = new window.og.CommentView({model: comment});
-        $('#og-comments ul').append(view.render().el);
+        jQuery('#og-comments ul').append(view.render().el);
       },
 
       addAll: function() {
@@ -117,7 +118,7 @@
       },
     });
 
-    $('html').append(_.template(omnigeistTpl));
+    jQuery('html').append(_.template(omnigeistTpl));
     window.og.App = new window.og.Omnigeist;
 
     var host = ogHost.split('//')[1].split(':');
@@ -126,7 +127,8 @@
         'port': ogPort});
 
     socket.on('connect', function(){ 
-      socket.send(currentUrl); 
+      console.log('connected');
+      socket.emit(currentUrl); 
     }) 
     socket.on('message', function(data){ 
         var comment = new window.og.Comment(data);
@@ -138,7 +140,7 @@
 
   jqueryLoaded(function() {
     //underscore is a prereq for backbone
-    $.getScript(ogHost + '/js/underscore-min.js', function() {
+    jQuery.getScript(ogHost + '/js/underscore-min.js', function() {
       loadScripts([
         ogHost + '/templates.js',
         ogHost + '/js/json2.js',
