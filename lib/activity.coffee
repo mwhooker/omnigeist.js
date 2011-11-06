@@ -194,8 +194,10 @@ class Disqus extends events.EventEmitter
         )
 
     fetch: () ->
-        @dq.call('posts', 'list', thread: "link:" + @c_url, (response) ->
+        console.log "fetching activity for thread: " + "link:" + @c_url
+        @dq.call('posts', 'list', thread: "link:" + @c_url, (response) =>
             response.iter (value, key) =>
+                console.log "got activity"
                 activity = new UserActivity(
                     'disqus',
                     @c_url,
@@ -205,6 +207,7 @@ class Disqus extends events.EventEmitter
                     null, #created
                     value.points
                 )
+                @emit 'activity', activity
         )
 
 
@@ -212,4 +215,3 @@ exports.Digg = Digg
 exports.Reddit = Reddit
 exports.HackerNews = HackerNews
 exports.Disqus = Disqus
-

@@ -141,7 +141,7 @@ fanout = (expandedUrl, callback) ->
                 callback(i)
             )
         ,(cache) ->
-            _.each([geist.Reddit, geist.HackerNews, geist.Digg], (platform) ->
+            _.each([geist.Disqus, geist.Reddit, geist.HackerNews, geist.Digg], (platform) ->
                 p = new platform expandedUrl
                 p.fetch()
                 p.on('activity', (activity) ->
