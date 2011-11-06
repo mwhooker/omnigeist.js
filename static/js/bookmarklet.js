@@ -123,11 +123,10 @@
 
     var socket = new io.connect(ogHost);
 
-    socket.on('connect', function(){ 
-      console.log('connected');
+    socket.on('connect', function(){
       socket.send(currentUrl);
-    }) 
-    socket.on('message', function(data){ 
+    })
+    socket.on('activity', function(data){
         var comment = new window.og.Comment(data);
         window.og.App.addOne(comment);
     })

@@ -99,7 +99,7 @@ io.sockets.on('connection', (socket) ->
         expander.on('expanded',
             (originalUrl, expandedUrl) ->
               fanout(expandedUrl, (activity) ->
-                socket.send(activity)
+                socket.emit('activity', activity)
               )
             )
         console.log "message data: #{url}"
