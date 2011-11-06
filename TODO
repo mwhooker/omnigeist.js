@@ -22,3 +22,14 @@ UI
     wire them up
 
   let user resize horizontal dimensions
+
+node 0.6.0 & package updates broke some shit
+   * less.js & coffee-script are broken in npm
+   * had to use less.js HEAD with patches from
+       https://github.com/cloudhead/less.js/pull/377
+    * had to use coffee-script HEAD
+
+disqus-node isn't in npm. I've applied a custom patch
+
+Need to figure out how to get my disqus key out of source.
+    TODO: filter history to get rid of the key before I push.
