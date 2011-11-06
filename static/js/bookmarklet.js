@@ -121,21 +121,16 @@
     jQuery('html').append(_.template(omnigeistTpl));
     window.og.App = new window.og.Omnigeist;
 
-    var host = ogHost.split('//')[1].split(':');
-
-    var socket = new io.Socket(host[0], {
-        'port': ogPort});
+    var socket = new io.connect(ogHost);
 
     socket.on('connect', function(){ 
       console.log('connected');
-      socket.emit(currentUrl); 
+      socket.send(currentUrl);
     }) 
     socket.on('message', function(data){ 
         var comment = new window.og.Comment(data);
         window.og.App.addOne(comment);
     })
-    socket.on('disconnect', function(){}) 
-    socket.connect();
   }
 
   jqueryLoaded(function() {

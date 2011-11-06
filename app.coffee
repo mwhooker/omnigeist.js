@@ -2,7 +2,7 @@ jade = require 'jade'
 express = require 'express'
 geist = require './lib/activity'
 SingleUrlExpander = require('url-expander').SingleUrlExpander
-io = require 'socket.io'
+socket = require 'socket.io'
 eco = require 'eco'
 _ = require 'underscore'
 redis = require 'redis'
@@ -13,7 +13,7 @@ app = express.createServer(express.logger())
 app.configure(() ->
     port = parseInt(process.env.PORT || 8000)
     app.set('port', port)
-    app.set('socket.io transports', ['jsonp-polling'])
+    #app.set('socket.io transports', ['jsonp-polling'])
     staticDir = __dirname + '/static'
     app.use express.compiler(src: '/js', enable: ['coffeescript'])
     app.use express.compiler(src: staticDir, enable: ['less'])
@@ -87,23 +87,22 @@ port = app.set('port')
 console.log "Listening on port " + port
 app.listen port
 
-socket = io.listen(app, {
-    transports: app.set('socket.io transports')})
+io = socket.listen app#,
+#    transports: app.set('socket.io transports')
 
-socket.on('connection', (client) ->
+
+io.sockets.on('connection', (socket) ->
     console.log 'connection'
-    client.on('message', (url) ->
+    socket.on('message', (url) ->
         expander = new SingleUrlExpander(url)
         expander.expand()
         expander.on('expanded',
             (originalUrl, expandedUrl) ->
               fanout(expandedUrl, (activity) ->
-                client.send(activity)
+                socket.send(activity)
               )
             )
         console.log "message data: #{url}"
-    )
-    client.on('disconnect', () ->
     )
 )
 
