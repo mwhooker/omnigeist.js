@@ -13,6 +13,7 @@
     "request": "2.2.0",
     "spec": "1.0.0rc3",
     "coffee-script": "1.2.0",
-    "ejs": "0.4.3"
+    "ejs": "0.4.3",
+    "disqus-client": "git://github.com/mwhooker/disqus-node.git"
   }
 }
