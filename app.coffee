@@ -11,7 +11,7 @@ less = require 'less'
 app = express.createServer(express.logger())
 
 app.configure(() ->
-    port = parseInt(process.env.PORT || 8000)
+    port = parseInt(process.env.PORT || 8001)
     app.set('port', port)
     #app.set('socket.io transports', ['jsonp-polling'])
     staticDir = __dirname + '/static'

@@ -9,10 +9,10 @@
     "eco": "1.0.3",
     "underscore": "1.2.1",
     "redis": "0.6.7",
-    "less": "1.1.4",
+    "less": "1.2.0",
     "request": "2.2.0",
     "spec": "1.0.0rc3",
-    "coffee-script": "1.1.2",
+    "coffee-script": "1.2.0",
     "ejs": "0.4.3"
   }
 }
